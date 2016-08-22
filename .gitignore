@@ -1,0 +1,14 @@
+/target/
+.classpath
+.project
+.settings/
+.project.bak
+.externalToolBuilders
+css/
+fonts/
+images
+ext-ux/
+extjs/
+test.html
+*.bak
+
