@@ -1465,9 +1465,9 @@ Ext.define('Hc_Common.view.BasePageController', {
     initRowClass: function (record, index, rowParams, store) {
     	console.info("shenmeshihou++++++++++");
         var flag = record.get('_flag');
-        if (flag == 'A') return 'x-grid-rows-add';
-        if (flag == 'D') return 'x-grid-rows-delete';
-        if (record.dirty && !flag) return 'x-grid-rows-edit';
+        if (flag == 'A') return 'x-grid-height-add';
+        if (flag == 'D') return 'x-grid-height-delete';
+        if (record.dirty && !flag) return 'x-grid-height-edit';
         return ''
     },
 
@@ -2507,807 +2507,821 @@ Ext.define('Hc_Common.view.BaseSimplePageController', {
         		    autoLoad: true,
         		    proxy: {
         		        type: 'ajax',
-        		        url: 'json/provinces.json',
+        		        url: Hc.basePath +'hc_file_json_province_list/province.json',
         		        reader: {
         		            type: 'json',
-        		            root: 'personInfoList'
-        		          //  idProperty: 'name'
+        		            rootProperty: 'list',
+        		            idProperty: 'provinceNo'
         		        }
         		    },
 
         		    //另外，可以配Ext.data.Model的名称(如 Ext.data.Store 中的例子)
         		    fields: [{name: 'id',   type: 'int'},  
-             		        {name: 'name',  type: 'string'},  
-             		        {name: 'age',  type: 'int'}] 
+             		        {name: 'provinceNo',  type: 'string'},  
+             		        {name: 'provinceName',  type: 'string'}] 
         		});
         	  
         	  console.info(myStore);
         	  var win;
-        	                                  win=new Ext.Window({
-        	                                      title:'新增',
-        	                                      width: window.screen.availWidth/2,
-        	                                      height:(window.screen.availHeight/3)*2,
-        	                                      layout:'fit',//设置窗口内部布局
-        	                                      closeAction:'hide',
-        	                                      plain:false,//true则主体背景透明，false则和主体背景有些差别
-        	                                      collapsible:false,//是否可收缩
-        	                                      modal:true,//是否为模式窗体
-        	                                      items:new Ext.form.FormPanel({//窗体中中是一个一个TabPanel
-        	                                    	  title:'--->供应商管理',
-        	                                          deferredRender:false,
-        	                                          bodyPadding: 0,
-        	                                          layout: {
-        	                                              type: 'form'
-        	                                             // columns:3
-        	                                          },
-        	                                          header: {
-        	                                              height: 20,
-        	                                              padding: 0
-        	                                          },
-        	                                       
-        	                                          collapsible: true,
-        	                                        
-        	                                          bodyStyle: 'background:#dbdbe0; padding:0px;',
-        	                                          scrollable:true,
-        	                                          defaults:{
-        	                                        	  border:false  ,
-        	                                        	  bodyPadding: 0,
-        	                                          },
-        	                                          items:[{
-        	                                        	
-        	                                        	 layout : "column", //第一行
-        	                                        	 defaults:{
-        	                                        		 border:false ,
-        	                                        		 bodyPadding: 0,
-        	                                        		 labelWidth: 70,
-        	                                        		 
-            	                                        	 labelAlign: 'right',
-            	                                        	 bodyStyle: 'background:#cbdbe0; padding:0px;'
-        	                                        	 },
-        	                                        	 itemCls:'margin:0px;',
-        	                                        	 bodyStyle: 'background:#cbdbe0; padding:0px;border:0px',
-        	                                        	 items:[
-															{
-          
-															    layout : "form", 
-															    columnHeight:.9,
-																items: [
-																         {
-																        	   readOnly:true, 
-															             	   labelWidth:65, 
-															             	   xtype: 'textfield', 
-															                   fieldLabel:'供应商编码', 
-															                   name: 'supplierName'   
-															               }
-															           ]
-															 },
-															 {
-																    columnWidth : .92,             
-																    layout : "form",   
-																	items: [
-																               {
-																             	   labelWidth:65,
-																             	   width:550,
-																             	   xtype: 'textfield', 
-																                   fieldLabel:'供应商名称', 
-																                   name: 'supplierName',
-																                   allowBlank:false,
-																                   maxLength:120,
-																                   maxLengthText:'此框允许输入120个字符',
- 																                   listeners: {
- 																                       render: function(obj) {
- 																                             var font=document.createElement("font");
- 																                             font.setAttribute("color","red");
- 																                             var tips=document.createTextNode('*');//这个就是后面的文字提示信息
- 																                             font.appendChild(tips);
- 																                            obj.el.dom.appendChild(font);
- 																                     }
+        	  win=new Ext.Window({
+        	      title:'新增',
+        	      width: window.screen.availWidth/2,
+        	      height:(window.screen.availHeight/3)*2,
+        	      layout:'fit',//设置窗口内部布局
+        	      closeAction:'hide',
+        	      plain:false,//true则主体背景透明，false则和主体背景有些差别
+        	      collapsible:false,//是否可收缩
+        	      modal:true,//是否为模式窗体
+        	      items:new Ext.form.FormPanel({//窗体中中是一个一个TabPanel
+        		  title:'--->供应商管理',
+        		  deferredRender:false,
+        		  bodyPadding: 0,
+        		  layout: {
+        		      type: 'form'
+        		     // columns:3
+        		  },
+        		  header: {
+        		      height: 20,
+        		      padding: 0
+        		  },
+        	       
+        		  collapsible: true,
+        		
+        		  bodyStyle: 'background:#dbdbe0; padding:0px;',
+        		  scrollable:true,
+        		  defaults:{
+        			  border:false  ,
+        			  bodyPadding: 0,
+        		  },
+        		  items:[{
+        			
+        			 layout : "column", //第一行
+        			 defaults:{
+        				 border:false ,
+        				 bodyPadding: 0,
+        				 labelWidth: 70,
+        				 
+        			 labelAlign: 'right',
+        			 bodyStyle: 'background:#cbdbe0; padding:0px;'
+        			 },
+        			 itemCls:'margin:0px;',
+        			 bodyStyle: 'background:#cbdbe0; padding:0px;border:0px',
+        			 items:[
+        										{
 
- 																                   }
-																               }
-																           ]
-																 }
-															        	                                        	 
-														]
-        	                                          },
-        	                                          {
-          	                                        	
-         	                                        	 layout : "column", //第二行
-         	                                        	 defaults:{
-         	                                        		 border:false ,
-         	                                        		 bodyPadding: 0,
-         	                                        		 labelWidth: 70,
-             	                                        	 labelAlign: 'right',
-             	                                        	 bodyStyle: 'background:#cbdbe0; padding:0px;'
-         	                                        	 },
-         	                                        	
-         	                                        	 bodyStyle: 'background:#cbdbe0; padding:0px;',
-         	                                        	 items:[
- 															{
-           
- 															    layout : "form", 
- 															    columnWidth : .99,
- 																items: [
- 																         {
- 																        	 
- 															             	   labelWidth:65, 
- 															             	   xtype: 'textfield', 
- 															                   fieldLabel:'供应商地址', 
- 															                   name: 'supplierName',
- 															                   allowBlank:false,
-															                   maxLength:145,
-															                   maxLengthText:'此框允许输入145个字符',
-															                   listeners: {
-															                       render: function(obj) {
-															                             var font=document.createElement("font");
-															                             font.setAttribute("color","red");
-															                             var tips=document.createTextNode('*');//这个就是后面的文字提示信息
-															                             font.appendChild(tips);
-															                            obj.el.dom.appendChild(font);
-															                     }
+        										    layout : "form", 
+        										    columnHeight:.9,
+        											items: [
+        												 {
+        													   readOnly:true, 
+        												   labelWidth:65, 
+        												   xtype: 'textfield', 
+        												   fieldLabel:'供应商编码', 
+        												   name: 'supplierName'   
+        											       }
+        											   ]
+        										 },
+        										 {
+        											    columnWidth : .92,             
+        											    layout : "form",   
+        												items: [
+        												       {
+        													   labelWidth:65,
+        													   width:550,
+        													   xtype: 'textfield', 
+        													   fieldLabel:'供应商名称', 
+        													   name: 'supplierName',
+        													   allowBlank:false,
+        													   maxLength:120,
+        													   maxLengthText:'此框允许输入120个字符',
+        													   listeners: {
+        													       render: function(obj) {
+        														     var font=document.createElement("font");
+        														     font.setAttribute("color","red");
+        														     var tips=document.createTextNode('*');//这个就是后面的文字提示信息
+        														     font.appendChild(tips);
+        														    obj.el.dom.appendChild(font);
+        													     }
 
-															                  }
- 																               
- 															               }
- 															           ]
- 															 }
- 															]
- 															        	                                        	 
-         	                                          },
-         	                                         {
+        													   }
+        												       }
+        												   ]
+        											 }
+        																		 
+        									]
+        		  },
+        		  {
+        			
+        			 layout : "column", //第二行
+        			 defaults:{
+        				 border:false ,
+        				 bodyPadding: 0,
+        				 labelWidth: 70,
+        			 labelAlign: 'right',
+        			 bodyStyle: 'background:#cbdbe0; padding:0px;'
+        			 },
+        			
+        			 bodyStyle: 'background:#cbdbe0; padding:0px;',
+        			 items:[
+        										{
 
-         	                                        	 layout : "column", //第三行
-         	                                        	 defaults:{
-		         	                                        	 border:false ,
-		         	                                        	 bodyPadding: 0,
-		         	                                        	 labelWidth: 70,
-		         	                                        	 labelAlign: 'right',
-		         	                                        	 bodyStyle: 'background:#cbdbe0; padding:0px;'
-         	                                        	 },
+        										    layout : "form", 
+        										    columnWidth : .99,
+        											items: [
+        												 {
+        													 
+        												   labelWidth:65, 
+        												   xtype: 'textfield', 
+        												   fieldLabel:'供应商地址', 
+        												   name: 'supplierName',
+        												   allowBlank:false,
+        												   maxLength:145,
+        												   maxLengthText:'此框允许输入145个字符',
+        												   listeners: {
+        												       render: function(obj) {
+        													     var font=document.createElement("font");
+        													     font.setAttribute("color","red");
+        													     var tips=document.createTextNode('*');//这个就是后面的文字提示信息
+        													     font.appendChild(tips);
+        													    obj.el.dom.appendChild(font);
+        												     }
 
-         	                                        	 bodyStyle: 'background:#cbdbe0; padding:0px;',
+        												  }
+        												       
+        											       }
+        											   ]
+        										 }
+        										]
+        																		 
+        		  },
+        		 {
 
-         	                                        	 items:[
-         	                                        	 {
+        			 layout : "column", //第三行
+        			 defaults:{
+        					 border:false ,
+        					 bodyPadding: 0,
+        					 labelWidth: 70,
+        					 labelAlign: 'right',
+        					 bodyStyle: 'background:#cbdbe0; padding:0px;'
+        			 },
 
-         	                                        	     layout : "form", 
-         	                                        	     
-         	                                        	 	items: [
-         	                                        	 		  {
-	         	                                        	 		   labelWidth:65, 
-	         	                                        	 		   xtype: 'textfield', 
-	         	                                        	 		   fieldLabel:'公司电话', 
-	         	                                        	 		   name: 'supplierName',
-	         	                                        	 		   allowBlank:false,
-	         	                                        	 		   regex:/^(0[0-9]{2,3}\-)?([2-9][0-9]{6,7})+(\-[0-9]{1,4})?$|(^(13[0-9]|15[0|3|6|7|8|9]|18[8|9])\d{8}$)/,
-	         	                                        	 		   regexText:'正确的电话号码，\n\n如：0591-6487256，15005059587',
-	         	                                        	 		   listeners: {
-														                       render: function(obj) {
-														                             var font=document.createElement("font");
-														                             font.setAttribute("color","red");
-														                             var tips=document.createTextNode('*');//这个就是后面的文字提示信息
-														                             font.appendChild(tips);
-														                            obj.el.dom.appendChild(font);
-														                     }
+        			 bodyStyle: 'background:#cbdbe0; padding:0px;',
 
-														              }
-         	                                        	 	       },
-	     	                                        	 	       {
-	          	                                        	 		   labelWidth:65, 
-	          	                                        	 		   xtype: 'textfield', 
-	          	                                        	 		   fieldLabel:'公司网址', 
-	          	                                        	 		   name: 'supplierName' 
-	          	                                        	 	   }
-         	                                        	 	   ]
-         	                                        	  },
-         	                                        	  {
-         	                                        	 	    columnWidth : .4,             
-         	                                        	 	    layout : "form",   
-         	                                        	 		items: [
-         	                                        	 		       {
-         	                                        	 			   labelWidth:65,
-         	                                        	 			   width:550,
-         	                                        	 			   xtype: 'textfield', 
-         	                                        	 			   fieldLabel:'公司传真', 
-         	                                        	 			   name: 'supplierName',
-         	                                        	 			   allowBlank:false,
-         	                                        	 			   regex:/^[+]{0,1}(\d){1,3}[ ]?([-]?((\d)|[ ]){1,12})+$/,
-         	                                        	 		       },
-    	     	                                        	 	       {
-    	          	                                        	 		   labelWidth:65, 
-    	          	                                        	 		   xtype: 'textfield', 
-    	          	                                        	 		   fieldLabel:'邮 &nbsp;&nbsp;&nbsp;&nbsp; 编', 
-    	          	                                        	 		   name: 'supplierName',
-    	          	                                        	 		   allowBlank:false,
-         	                                        	 			       regex:/[1-9]{1}(\d+){5}/,
-														                   listeners: {
-															                       render: function(obj) {
-															                             var font=document.createElement("font");
-															                             font.setAttribute("color","red");
-															                             var tips=document.createTextNode('*');//这个就是后面的文字提示信息   
-															                             font.appendChild(tips);
-															                            obj.el.dom.appendChild(font);
-															                     }
+        			 items:[
+        			 {
 
-															              } 
-    	          	                                        	 	   }
-         	                                        	 		   ]
-         	                                        	  }
-         	                                        	 ,
-        	                                        	  {
-        	                                        	 	    columnWidth : .5,             
-        	                                        	 	    layout : "form",   
-        	                                        	 		items: [
-        	                                        	 		       {
-        	                                        	 			   labelWidth:65,
-        	                                        	 			   width:550,
-        	                                        	 			   xtype: 'textfield', 
-        	                                        	 			   fieldLabel:'电子邮件', 
-        	                                        	 			   name: 'supplierName',
-        	                                        	 			   allowBlank:false,
-        	                                        	 			   regex:/\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/,
-													                   listeners: {
-														                       render: function(obj) {
-														                             var font=document.createElement("font");
-														                             font.setAttribute("color","red");
-														                             var tips=document.createTextNode('*');//这个就是后面的文字提示信息
-														                             font.appendChild(tips);
-														                            obj.el.dom.appendChild(font);
-														                     }
+        			     layout : "form", 
+        			     
+        				items: [
+        					  {
+        						   labelWidth:65, 
+        						   xtype: 'textfield', 
+        						   fieldLabel:'公司电话', 
+        						   name: 'supplierName',
+        						   allowBlank:false,
+        						   regex:/^(0[0-9]{2,3}\-)?([2-9][0-9]{6,7})+(\-[0-9]{1,4})?$|(^(13[0-9]|15[0|3|6|7|8|9]|18[8|9])\d{8}$)/,
+        						   regexText:'正确的电话号码，\n\n如：0591-6487256，15005059587',
+        						   listeners: {
+        											       render: function(obj) {
+        												     var font=document.createElement("font");
+        												     font.setAttribute("color","red");
+        												     var tips=document.createTextNode('*');//这个就是后面的文字提示信息
+        												     font.appendChild(tips);
+        												    obj.el.dom.appendChild(font);
+        												    console.info("输出了美味哟------------");
+       												   
+       												     console.info(obj);
+       												    console.info("输出了美味哟*************");
+        											     }
 
-														              }
-        	                                        	 		       },
-    	     	                                        	 	       {
-    	          	                                        	 		   labelWidth:65, 
-    	          	                                        	 		   xtype: 'textfield', 
-    	          	                                        	 		   fieldLabel:'国&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;家', 
-    	          	                                        	 		   name: 'supplierName',
-    	          	                                        	 		   allowBlank:false,
-    	          	                                        	 		   maxLength:48,
-    	          	                                        	 		   maxLengthText:'最大字符长度48字符',
-														                   listeners: {
-															                       render: function(obj) {
-															                             var font=document.createElement("font");
-															                             font.setAttribute("color","red");
-															                             var tips=document.createTextNode('*');//这个就是后面的文字提示信息
-															                             font.appendChild(tips);
-															                            obj.el.dom.appendChild(font);
-															                     }
+        										      }
+        				       },
+        				       {
+        						   labelWidth:65, 
+        						   xtype: 'textfield', 
+        						   fieldLabel:'公司网址', 
+        						   name: 'supplierName' 
+        					   }
+        				   ]
+        			  },
+        			  {
+        				    columnWidth : .4,             
+        				    layout : "form",   
+        					items: [
+        					       {
+        						   labelWidth:65,
+        						   width:550,
+        						   xtype: 'textfield', 
+        						   fieldLabel:'公司传真', 
+        						   name: 'supplierName',
+        						   allowBlank:false,
+        						   regex:/^[+]{0,1}(\d){1,3}[ ]?([-]?((\d)|[ ]){1,12})+$/,
+        					       },
+        				       {
+        						   labelWidth:65, 
+        						   xtype: 'textfield', 
+        						   fieldLabel:'邮 &nbsp;&nbsp;&nbsp;&nbsp; 编', 
+        						   name: 'supplierName',
+        						   allowBlank:false,
+        						       regex:/[1-9]{1}(\d+){5}/,
+        						       listeners: {
+        											       render: function(obj) {
+        												     var font=document.createElement("font");
+        												     font.setAttribute("color","red");
+        												     var tips=document.createTextNode('*');//这个就是后面的文字提示信息
+        												     font.appendChild(tips);
+        												     console.info("输出了美味哟");
+        												     obj.el.dom.appendChild(font);
+        												     console.info(obj);
+        											     }
 
-															              }
-    	          	                                        	 	   }
-        	                                        	 		   ]
-        	                                        	  }
-         	                                        	 								 
-         	                                        	 ]								 
-         	                                        	 },
-         	                                        	 {
-               	                                        	
-             	                                        	 layout : "column", //第四行
-             	                                        	 defaults:{
-             	                                        		 border:false ,
-             	                                        		 bodyPadding: 0,
-             	                                        		 labelWidth: 70,
-                 	                                        	 labelAlign: 'right',
-                 	                                        	 bodyStyle: 'background:#cbdbe0; padding:0px;'
-             	                                        	 },
-             	                                        	
-             	                                        	 bodyStyle: 'background:#cbdbe0; padding:0px;',
-             	                                        	 items:[
-     															{
-               
-     															    layout : "form", 
-     															    columnWidth : .3,
-     																items: [
-     																         {
-     																        	 
-     															             	   labelWidth:65, 
-     															             	   xtype: 'extcombox', 
-     															             	   store:myStore,
-     															                   fieldLabel:'省&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;份', 
-     															                   name: 'supplierName',
-     															                   displaymember:'name',
-     															 				   valuemember:'age',
-     															                   allowBlank:false,
-     															                   blankText:'请选择省份',
-     															                   emptyText:'请选择省份',
- 																                   listeners: {
- 																                       render: function(obj) {
- 																                             var font=document.createElement("font");
- 																                             font.setAttribute("color","red");
- 																                             var tips=document.createTextNode('*');//这个就是后面的文字提示信息
- 																                             font.appendChild(tips);
- 																                            obj.el.dom.appendChild(font);
- 																                              
- 																                     }
+        											  }
+        					   }
+        					   ]
+        			  }
+        			 ,
+        			  {
+        				    columnWidth : .5,             
+        				    layout : "form",   
+        					items: [
+        					       {
+        						   labelWidth:65,
+        						   width:550,
+        						   xtype: 'textfield', 
+        						   fieldLabel:'电子邮件', 
+        						   name: 'supplierName',
+        						   allowBlank:false,
+        						   regex:/\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/,
+        										   listeners: {
+        											       render: function(obj) {
+        												     var font=document.createElement("font");
+        												     font.setAttribute("color","red");
+        												     var tips=document.createTextNode('*');//这个就是后面的文字提示信息
+        												     font.appendChild(tips);
+        												    obj.el.dom.appendChild(font);
+        											     }
 
- 																                   }
-     															               }
-     															           ]
-     															 },
-     															{
-     													               
-      															    layout : "form", 
-      															    columnWidth : .3,
-      																items: [
-      																         {
-      																        	 
-      															             	   labelWidth:65, 
-      															             	   xtype: 'textfield', 
-      															                   fieldLabel:'城&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;市', 
-      															                   name: 'supplierName' ,
-      															                   allowBlank:false,
-	   															                   blankText:'请选择城市',
-	   															                   emptyText:'请选择城市',
- 																                   listeners: {
- 																                       render: function(obj) {
- 																                             var font=document.createElement("font");
- 																                             font.setAttribute("color","red");
- 																                             var tips=document.createTextNode('*');//这个就是后面的文字提示信息
- 																                             font.appendChild(tips);
- 																                            obj.el.dom.appendChild(font);
- 																                     }
+        										      }
+        					       },
+        				       {
+        						   labelWidth:65, 
+        						   xtype: 'textfield', 
+        						   fieldLabel:'国&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;家', 
+        						   name: 'supplierName',
+        						   allowBlank:false,
+        						   maxLength:48,
+        						   maxLengthText:'最大字符长度48字符',
+        											   listeners: {
+        												       render: function(obj) {
+        													     var font=document.createElement("font");
+        													     font.setAttribute("color","red");
+        													     var tips=document.createTextNode('*');//这个就是后面的文字提示信息
+        													     font.appendChild(tips);
+        													    obj.el.dom.appendChild(font);
+        												     }
 
- 																                  }
-      															               }
-      															           ]
-      															 }
-     															]
-     															        	                                        	 
-             	                                          },
-             	                                          
-             	                                          
-             	                                         {
+        											      }
+        					   }
+        					   ]
+        			  }
+        											 
+        			 ]								 
+        			 },
+        			 {
+        			
+        			 layout : "column", //第四行
+        			 defaults:{
+        				 border:false ,
+        				 bodyPadding: 0,
+        				 labelWidth: 70,
+        				 labelAlign: 'right',
+        				 bodyStyle: 'background:#cbdbe0; padding:0px;'
+        			 },
+        			
+        			 bodyStyle: 'background:#cbdbe0; padding:0px;',
+        			 items:[
+        										{
 
-              	                                        	 layout : "column", //第五行
-              	                                        	 defaults:{
-     		         	                                        	 border:false ,
-     		         	                                        	 bodyPadding: 0,
-     		         	                                        	 labelWidth: 70,
-     		         	                                        	 labelAlign: 'right',
-     		         	                                        	 bodyStyle: 'background:#cbdbe0; padding:0px;'
-              	                                        	 },
+        										    layout : "form", 
+        										    columnWidth : .3,
+        											items: [
+        												 {
+        													 
+        												   labelWidth:65, 
+        												   xtype: 'extcombox', 
+        												   store:myStore,
+        												   fieldLabel:'省&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;份', 
+        												   //name: 'supplierName',
+        												   displaymember:'provinceName',
+        														   valuemember:'provinceNo',
+        												   allowBlank:false,
+        												   blankText:'请选择省份',
+        												   emptyText:'请选择省份',
+        												   
+        													   listeners: {
+        													       render: function(obj) {
+        														     var font=document.createElement("font");
+        														     font.setAttribute("color","red");
+        														     var tips=document.createTextNode('*');//这个就是后面的文字提示信息
+        														     font.appendChild(tips);
+        														     obj.el.dom.appendChild(font);
+        														      
+        													     }
 
-              	                                        	 bodyStyle: 'background:#cbdbe0; padding:0px;',
+        													   }
+        											       }
+        											   ]
+        										 },
+        										{
+        									       
+        										    layout : "form", 
+        										    columnWidth : .3,
+        											items: [
+        												 {
+        													 
+        												   labelWidth:65, 
+        												  
+        												   fieldLabel:'城&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;市', 
+        												   xtype:'extcombox',
+	       									               store: myStore,
+	       												   displaymember:'provinceName',
+	       												   valuemember:'provinceNo',
+        												 //  name: 'supplierName' ,
+        												   allowBlank:false,
+        													   blankText:'请选择城市',
+        													   emptyText:'请选择城市',
+        													   listeners: {
+        													       render: function(obj) {
+        														     var font=document.createElement("font");
+        														     font.setAttribute("color","red");
+        														     var tips=document.createTextNode('*');//这个就是后面的文字提示信息
+        														     font.appendChild(tips);
+        														     obj.el.dom.appendChild(font);
+        														     
+        														     console.info("什么对象");
+        														     console.info(obj);
+        													     }
 
-              	                                        	 items:[
-              	                                        	 {
+        													  }
+        											       }
+        											   ]
+        										 }
+        										]
+        																		 
+        		  },
+        		  
+        		  
+        		 {
 
-              	                                        	     layout : "form", 
-              	                                        	     
-              	                                        	 	items: [
-              	                                        	 		  {
-     	         	                                        	 		   labelWidth:65, 
-     	         	                                        	 		   xtype: 'textfield', 
-     	         	                                        	 		   fieldLabel:'法人代表', 
-     	         	                                        	 		   name: 'supplierName',
-														                   listeners: {
-															                       render: function(obj) {
-															                             var font=document.createElement("font");
-															                             font.setAttribute("color","red");
-															                             var tips=document.createTextNode('*');//这个就是后面的文字提示信息
-															                             font.appendChild(tips);
-															                            obj.el.dom.appendChild(font);
-															                     }
+        			 layout : "column", //第五行
+        			 defaults:{
+        					 border:false ,
+        					 bodyPadding: 0,
+        					 labelWidth: 70,
+        					 labelAlign: 'right',
+        					 bodyStyle: 'background:#cbdbe0; padding:0px;'
+        			 },
 
-															              } 
-              	                                        	 	       },
-     	     	                                        	 	       {
-     	          	                                        	 		   labelWidth:65, 
-     	          	                                        	 		   xtype: 'textfield', 
-     	          	                                        	 		   fieldLabel:'注册资本', 
-     	          	                                        	 		   name: 'supplierName',
-														                   listeners: {
-															                       render: function(obj) {
-															                             var font=document.createElement("font");
-															                             font.setAttribute("color","red");
-															                             var tips=document.createTextNode('万元');//这个就是后面的文字提示信息
-															                             font.appendChild(tips);
-															                            obj.el.dom.appendChild(font);
-															                     }
+        			 bodyStyle: 'background:#cbdbe0; padding:0px;',
 
-															              }
-     	          	                                        	 	   },
-     	     	                                        	 	       {
-     	          	                                        	 		   labelWidth:65, 
-     	          	                                        	 		   xtype: 'textfield', 
-     	          	                                        	 		   fieldLabel:'使用货币', 
-     	          	                                        	 		   name: 'supplierName',
-														                   listeners: {
-															                       render: function(obj) {
-															                             var font=document.createElement("font");
-															                             font.setAttribute("color","red");
-															                             var tips=document.createTextNode('*');//这个就是后面的文字提示信息
-															                             font.appendChild(tips);
-															                            obj.el.dom.appendChild(font);
-															                     }
+        			 items:[
+        			 {
 
-															              } 
-     	          	                                        	 	   },
-     	     	                                        	 	       {
-     	          	                                        	 		   labelWidth:65, 
-     	          	                                        	 		   xtype: 'textfield', 
-     	          	                                        	 		   fieldLabel:'年度收入', 
-     	          	                                        	 		   name: 'supplierName',
-														                   listeners: {
-															                       render: function(obj) {
-															                             var font=document.createElement("font");
-															                             font.setAttribute("color","red");
-															                             var tips=document.createTextNode('万元');//这个就是后面的文字提示信息
-															                             font.appendChild(tips);
-															                            obj.el.dom.appendChild(font);
-															                     }
+        			     layout : "form", 
+        			     
+        				items: [
+        					  {
+        						   labelWidth:65, 
+        						   xtype: 'textfield', 
+        						   fieldLabel:'法人代表', 
+        						   name: 'supplierName',
+        											   listeners: {
+        												       render: function(obj) {
+        													     var font=document.createElement("font");
+        													     font.setAttribute("color","red");
+        													     var tips=document.createTextNode('*');//这个就是后面的文字提示信息
+        													     font.appendChild(tips);
+        													    obj.el.dom.appendChild(font);
+        												     }
 
-															              } 
-     	          	                                        	 	   }
-              	                                        	 	   ]
-              	                                        	  },
-              	                                        	  {
-              	                                        	 	    columnWidth : .4,             
-              	                                        	 	    layout : "form",   
-              	                                        	 		items: [
-              	                                        	 		       {
-              	                                        	 			   labelWidth:65,
-              	                                        	 			   width:550,
-              	                                        	 			   xtype: 'textfield', 
-              	                                        	 			   fieldLabel:'组织形式', 
-              	                                        	 			   name: 'supplierName',
-														                   listeners: {
-															                       render: function(obj) {
-															                             var font=document.createElement("font");
-															                             font.setAttribute("color","red");
-															                             var tips=document.createTextNode('*');//这个就是后面的文字提示信息
-															                             font.appendChild(tips);
-															                            obj.el.dom.appendChild(font);
-															                     }
+        											      } 
+        				       },
+        				       {
+        						   labelWidth:65, 
+        						   xtype: 'textfield', 
+        						   fieldLabel:'注册资本', 
+        						   name: 'supplierName',
+        											   listeners: {
+        												       render: function(obj) {
+        													     var font=document.createElement("font");
+        													     font.setAttribute("color","red");
+        													     var tips=document.createTextNode('万元');//这个就是后面的文字提示信息
+        													     font.appendChild(tips);
+        													    obj.el.dom.appendChild(font);
+        												     }
 
-															              }
-              	                                        	 		       },
-         	     	                                        	 	       {
-         	          	                                        	 		   labelWidth:65, 
-         	          	                                        	 		   xtype: 'textfield', 
-         	          	                                        	 		   fieldLabel:'营业执照', 
-         	          	                                        	 		   name: 'supplierName' 
-         	          	                                        	 	   },
-         	     	                                        	 	       {
-         	          	                                        	 		   labelWidth:65, 
-         	          	                                        	 		   xtype: 'textfield', 
-         	          	                                        	 		   fieldLabel:'联系人', 
-         	          	                                        	 		   name: 'supplierName',
-															                   listeners: {
-															                       render: function(obj) {
-															                             var font=document.createElement("font");
-															                             font.setAttribute("color","red");
-															                             var tips=document.createTextNode('*');//这个就是后面的文字提示信息
-															                             font.appendChild(tips);
-															                            obj.el.dom.appendChild(font);
-															                     }
+        											      }
+        					   },
+        				       {
+        						   labelWidth:65, 
+        						   xtype: 'textfield', 
+        						   fieldLabel:'使用货币', 
+        						   name: 'supplierName',
+        											   listeners: {
+        												       render: function(obj) {
+        													     var font=document.createElement("font");
+        													     font.setAttribute("color","red");
+        													     var tips=document.createTextNode('*');//这个就是后面的文字提示信息
+        													     font.appendChild(tips);
+        													    obj.el.dom.appendChild(font);
+        												     }
 
-															              } 
-         	          	                                        	 	   },
-         	     	                                        	 	       {
-         	          	                                        	 		   labelWidth:65, 
-         	          	                                        	 		   xtype: 'textfield', 
-         	          	                                        	 		   fieldLabel:'跟单采购', 
-         	          	                                        	 		   name: 'supplierName',
-															                   listeners: {
-															                       render: function(obj) {
-															                             var font=document.createElement("font");
-															                             font.setAttribute("color","red");
-															                             var tips=document.createTextNode('*');//这个就是后面的文字提示信息
-															                             font.appendChild(tips);
-															                            obj.el.dom.appendChild(font);
-															                     }
+        											      } 
+        					   },
+        				       {
+        						   labelWidth:65, 
+        						   xtype: 'textfield', 
+        						   fieldLabel:'年度收入', 
+        						   name: 'supplierName',
+        											   listeners: {
+        												       render: function(obj) {
+        													     var font=document.createElement("font");
+        													     font.setAttribute("color","red");
+        													     var tips=document.createTextNode('万元');//这个就是后面的文字提示信息
+        													     font.appendChild(tips);
+        													    obj.el.dom.appendChild(font);
+        												     }
 
-															              } 
-         	          	                                        	 	   }
-              	                                        	 		   ]
-              	                                        	  }
-              	                                        	 ,
-             	                                        	  {
-             	                                        	 	    columnWidth : .5,             
-             	                                        	 	    layout : "form",   
-             	                                        	 		items: [
-             	                                        	 		       {
-             	                                        	 			   labelWidth:65,
-             	                                        	 			   width:550,
-             	                                        	 			   xtype: 'textfield', 
-             	                                        	 			   fieldLabel:'供应商性质', 
-             	                                        	 			   name: 'supplierName'
-             	                                        	 		       },
-         	     	                                        	 	       {
-         	          	                                        	 		   labelWidth:65, 
-         	          	                                        	 		   xtype: 'textfield', 
-         	          	                                        	 		   fieldLabel:'行&nbsp;业&nbsp;类&nbsp;型', 
-         	          	                                        	 		   name: 'supplierName' 
-         	          	                                        	 	   },
-         	     	                                        	 	       {
-         	          	                                        	 		   labelWidth:65, 
-         	          	                                        	 		   xtype: 'textfield', 
-         	          	                                        	 		   fieldLabel:'供应商级别', 
-         	          	                                        	 		   name: 'supplierName' 
-         	          	                                        	 	   },
-         	     	                                        	 	       {
-         	          	                                        	 		   labelWidth:65, 
-         	          	                                        	 		   xtype: 'textfield', 
-         	          	                                        	 		   fieldLabel:'联系人手机', 
-         	          	                                        	 		   name: 'supplierName',
-															                   listeners: {
-															                       render: function(obj) {
-															                             var font=document.createElement("font");
-															                             font.setAttribute("color","red");
-															                             var tips=document.createTextNode('*');//这个就是后面的文字提示信息
-															                             font.appendChild(tips);
-															                            obj.el.dom.appendChild(font);
-															                     }
+        											      } 
+        					   }
+        				   ]
+        			  },
+        			  {
+        				    columnWidth : .4,             
+        				    layout : "form",   
+        					items: [
+        					       {
+        						   labelWidth:65,
+        						   width:550,
+        						   xtype: 'textfield', 
+        						   fieldLabel:'组织形式', 
+        						   name: 'supplierName',
+        											   listeners: {
+        												       render: function(obj) {
+        													     var font=document.createElement("font");
+        													     font.setAttribute("color","red");
+        													     var tips=document.createTextNode('*');//这个就是后面的文字提示信息
+        													     font.appendChild(tips);
+        													    obj.el.dom.appendChild(font);
+        												     }
 
-															              } 
-         	          	                                        	 	   }
-             	                                        	 		   ]
-             	                                        	  }
-              	                                        	 								 
-              	                                        	 ]								 
-              	                                        	 },
-              	                                        	 
-              	                                        	 
-              	                                        	 {
+        											      }
+        					       },
+        					       {
+        							   labelWidth:65, 
+        							   xtype: 'textfield', 
+        							   fieldLabel:'营业执照', 
+        							   name: 'supplierName' 
+        						   },
+        					       {
+        							   labelWidth:65, 
+        							   xtype: 'textfield', 
+        							   fieldLabel:'联系人', 
+        							   name: 'supplierName',
+        												   listeners: {
+        												       render: function(obj) {
+        													     var font=document.createElement("font");
+        													     font.setAttribute("color","red");
+        													     var tips=document.createTextNode('*');//这个就是后面的文字提示信息
+        													     font.appendChild(tips);
+        													    obj.el.dom.appendChild(font);
+        												     }
 
-                 	                                        	 layout : "column", //第六行
-                 	                                        	 defaults:{
-        		         	                                        	 border:false ,
-        		         	                                        	 bodyPadding: 0,
-        		         	                                        	 labelWidth: 70,
-        		         	                                        	 labelAlign: 'right',
-        		         	                                        	 bodyStyle: 'background:#cbdbe0; padding:0px;'
-                 	                                        	 },
+        											      } 
+        						   },
+        					       {
+        							   labelWidth:65, 
+        							   xtype: 'textfield', 
+        							   fieldLabel:'跟单采购', 
+        							   name: 'supplierName',
+        												   listeners: {
+        												       render: function(obj) {
+        													     var font=document.createElement("font");
+        													     font.setAttribute("color","red");
+        													     var tips=document.createTextNode('*');//这个就是后面的文字提示信息
+        													     font.appendChild(tips);
+        													    obj.el.dom.appendChild(font);
+        												     }
 
-                 	                                        	 bodyStyle: 'background:#cbdbe0; padding:0px;',
+        											      } 
+        						   }
+        					   ]
+        			  }
+        			 ,
+        			  {
+        				    columnWidth : .5,             
+        				    layout : "form",   
+        					items: [
+        					       {
+        						   labelWidth:65,
+        						   width:550,
+        						   xtype: 'textfield', 
+        						   fieldLabel:'供应商性质', 
+        						   name: 'supplierName'
+        					       },
+        					       {
+        							   labelWidth:65, 
+        							   xtype: 'textfield', 
+        							   fieldLabel:'行&nbsp;业&nbsp;类&nbsp;型', 
+        							   name: 'supplierName' 
+        						   },
+        					       {
+        							   labelWidth:65, 
+        							   xtype: 'textfield', 
+        							   fieldLabel:'供应商级别', 
+        							   name: 'supplierName' 
+        						   },
+        					       {
+        							   labelWidth:65, 
+        							   xtype: 'textfield', 
+        							   fieldLabel:'联系人手机', 
+        							   name: 'supplierName',
+        												   listeners: {
+        												       render: function(obj) {
+        													     var font=document.createElement("font");
+        													     font.setAttribute("color","red");
+        													     var tips=document.createTextNode('*');//这个就是后面的文字提示信息
+        													     font.appendChild(tips);
+        													    obj.el.dom.appendChild(font);
+        												     }
 
-                 	                                        	 items:[
-                 	                                        	 {
+        											      } 
+        						   }
+        					   ]
+        			  }
+        											 
+        			 ]								 
+        			 },
+        			 
+        			 
+        			 {
 
-                 	                                        	     layout : "form", 
-                 	                                        	     
-                 	                                        	 	items: [
-                 	                                        	 		  {
-        	         	                                        	 		   labelWidth:65, 
-        	         	                                        	 		   xtype: 'textfield', 
-        	         	                                        	 		   fieldLabel:'开户银行', 
-        	         	                                        	 		   name: 'supplierName',
-															                   listeners: {
-															                       render: function(obj) {
-															                             var font=document.createElement("font");
-															                             font.setAttribute("color","red");
-															                             var tips=document.createTextNode('*');//这个就是后面的文字提示信息
-															                             font.appendChild(tips);
-															                            obj.el.dom.appendChild(font);
-															                     }
+        				 layout : "column", //第六行
+        				 defaults:{
+        						 border:false ,
+        						 bodyPadding: 0,
+        						 labelWidth: 70,
+        						 labelAlign: 'right',
+        						 bodyStyle: 'background:#cbdbe0; padding:0px;'
+        				 },
 
-															                  } 
-                 	                                        	 	       },
-        	     	                                        	 	       {
-        	          	                                        	 		   labelWidth:65, 
-        	          	                                        	 		   xtype: 'textfield', 
-        	          	                                        	 		   fieldLabel:'付款方式', 
-        	          	                                        	 		   name: 'supplierName',
-															                   listeners: {
-															                       render: function(obj) {
-															                             var font=document.createElement("font");
-															                             font.setAttribute("color","red");
-															                             var tips=document.createTextNode('*');//这个就是后面的文字提示信息
-															                             font.appendChild(tips);
-															                            obj.el.dom.appendChild(font);
-															                     }
+        				 bodyStyle: 'background:#cbdbe0; padding:0px;',
 
-															                  }
-        	     	                                        	 	       }
-                 	                                        	 	   ]
-                 	                                        	  },
-                 	                                        	  {
-                 	                                        	 	    columnWidth : .4,             
-                 	                                        	 	    layout : "form",   
-                 	                                        	 		items: [
-                 	                                        	 		       {
-                 	                                        	 			   labelWidth:65,
-                 	                                        	 			   width:550,
-                 	                                        	 			   xtype: 'textfield', 
-                 	                                        	 			   fieldLabel:'银行账号', 
-                 	                                        	 			   name: 'supplierName'
-                 	                                        	 		       },
-            	     	                                        	 	       {
-            	          	                                        	 		   labelWidth:65, 
-            	          	                                        	 		   xtype: 'textfield', 
-            	          	                                        	 		   fieldLabel:'价值类别', 
-            	          	                                        	 		   name: 'supplierName' 
-            	          	                                        	 	   }
-                 	                                        	 		   ]
-                 	                                        	  }
-                 	                                        	 ,
-                	                                        	  {
-                	                                        	 	    columnWidth : .5,             
-                	                                        	 	    layout : "form",   
-                	                                        	 		items: [
-                	                                        	 		       {
-                	                                        	 			   labelWidth:65,
-                	                                        	 			   width:550,
-                	                                        	 			   xtype: 'textfield', 
-                	                                        	 			   fieldLabel:'成立日期', 
-                	                                        	 			   name: 'supplierName'
-                	                                        	 		       },
-            	     	                                        	 	       {
-            	          	                                        	 		   labelWidth:65, 
-            	          	                                        	 		   xtype: 'textfield', 
-            	          	                                        	 		   fieldLabel:'是否共享', 
-            	          	                                        	 		   name: 'supplierName' 
-            	          	                                        	 	   }
-                	                                        	 		   ]
-                	                                        	  }
-                 	                                        	 								 
-                 	                                        	 ]								 
-                 	                                        	 },
-                  	                                        	 
-                  	                                        	 
-                  	                                        	 {
+        				 items:[
+        				 {
 
-                     	                                        	 layout : "column", //第七行
-                     	                                        	 defaults:{
-            		         	                                        	 border:false ,
-            		         	                                        	 bodyPadding: 0,
-            		         	                                        	 labelWidth: 70,
-            		         	                                        	 labelAlign: 'right',
-            		         	                                        	 bodyStyle: 'background:#cbdbe0; padding:0px;'
-                     	                                        	 },
+        				     layout : "form", 
+        				     
+        					items: [
+        						  {
+        							   labelWidth:65, 
+        							   xtype: 'textfield', 
+        							   fieldLabel:'开户银行', 
+        							   name: 'supplierName',
+        												   listeners: {
+        												       render: function(obj) {
+        													     var font=document.createElement("font");
+        													     font.setAttribute("color","red");
+        													     var tips=document.createTextNode('*');//这个就是后面的文字提示信息
+        													     font.appendChild(tips);
+        													    obj.el.dom.appendChild(font);
+        												     }
 
-                     	                                        	 bodyStyle: 'background:#cbdbe0; padding:0px;',
+        												  } 
+        					       },
+        					       {
+        							   labelWidth:65, 
+        							   xtype: 'textfield', 
+        							   fieldLabel:'付款方式', 
+        							   name: 'supplierName',
+        												   listeners: {
+        												       render: function(obj) {
+        													     var font=document.createElement("font");
+        													     font.setAttribute("color","red");
+        													     var tips=document.createTextNode('*');//这个就是后面的文字提示信息
+        													     font.appendChild(tips);
+        													    obj.el.dom.appendChild(font);
+        												     }
 
-                     	                                        	 items:[
-                     	                                        	 {
+        												  }
+        					       }
+        					   ]
+        				  },
+        				  {
+        					    columnWidth : .4,             
+        					    layout : "form",   
+        						items: [
+        						       {
+        							   labelWidth:65,
+        							   width:550,
+        							   xtype: 'textfield', 
+        							   fieldLabel:'银行账号', 
+        							   name: 'supplierName'
+        						       },
+        					       {
+        							   labelWidth:65, 
+        							   xtype: 'textfield', 
+        							   fieldLabel:'价值类别', 
+        							   name: 'supplierName' 
+        						   }
+        						   ]
+        				  }
+        				 ,
+        				  {
+        					    columnWidth : .5,             
+        					    layout : "form",   
+        						items: [
+        						       {
+        							   labelWidth:65,
+        							   width:550,
+        							   xtype: 'textfield', 
+        							   fieldLabel:'成立日期', 
+        							   name: 'supplierName'
+        						       },
+        					       {
+        							   labelWidth:65, 
+        							   xtype: 'textfield', 
+        							   fieldLabel:'是否共享', 
+        							   name: 'supplierName' 
+        						   }
+        						   ]
+        				  }
+        												 
+        				 ]								 
+        				 },
+        				 
+        				 
+        				 {
 
-                     	                                        	     layout : "form", 
-                     	                                        	     
-                     	                                        	 	items: [
-                     	                                        	 		  {
-            	         	                                        	 		   labelWidth:65, 
-            	         	                                        	 		   xtype: 'textfield', 
-            	         	                                        	 		   fieldLabel:'创建用户', 
-            	         	                                        	 		   name: 'supplierName' 
-                     	                                        	 	       },
-            	     	                                        	 	       {
-            	          	                                        	 		   labelWidth:65, 
-            	          	                                        	 		   xtype: 'textfield', 
-            	          	                                        	 		   fieldLabel:'所在部门', 
-            	          	                                        	 		   name: 'supplierName' 
-            	          	                                        	 	   }
-                     	                                        	 	   ]
-                     	                                        	  },
-                     	                                        	  {
-                     	                                        	 	    columnWidth : .4,             
-                     	                                        	 	    layout : "form",   
-                     	                                        	 		items: [
-                     	                                        	 		       {
-                     	                                        	 			   labelWidth:65,
-                     	                                        	 			   width:550,
-                     	                                        	 			   xtype: 'textfield', 
-                     	                                        	 			   fieldLabel:'修改用户', 
-                     	                                        	 			   name: 'supplierName'
-                     	                                        	 		       },
-                	     	                                        	 	       {
-                	          	                                        	 		   labelWidth:65, 
-                	          	                                        	 		   xtype: 'textfield', 
-                	          	                                        	 		   fieldLabel:'修改时间', 
-                	          	                                        	 		   name: 'supplierName' 
-                	          	                                        	 	   }
-                     	                                        	 		   ]
-                     	                                        	  }
-                     	                                        	 ,
-                    	                                        	  {
-                    	                                        	 	    columnWidth : .5,             
-                    	                                        	 	    layout : "form",   
-                    	                                        	 		items: [
-                    	                                        	 		       {
-                    	                                        	 			   labelWidth:65,
-                    	                                        	 			   width:550,
-                    	                                        	 			   xtype: 'textfield', 
-                    	                                        	 			   fieldLabel:'登录日期', 
-                    	                                        	 			   name: 'supplierName'
-                    	                                        	 		       }
-                    	                                        	 		   ]
-                    	                                        	  }
-                     	                                        	 								 
-                     	                                        	 ]								 
-                     	                                        	 },
-                     	                                        	 
-                     	                                        	 
-                     	                                       	 {
-                            	                                        	
-                         	                                        	 layout : "column", //第八行
-                         	                                        	 defaults:{
-                         	                                        		 border:false ,
-                         	                                        		 bodyPadding: 0,
-                         	                                        		 labelWidth: 70,
-                             	                                        	 labelAlign: 'right',
-                             	                                        	 rows:4,
-                             	                                        	 bodyStyle: 'background:#cbdbe0; padding:0px;'
-                         	                                        	 },
-                         	                                        	
-                         	                                        	 bodyStyle: 'background:#cbdbe0; padding:0px;',
-                         	                                        	 items:[
-                 															{
-                           
-                 															    layout : "form", 
-                 															    columnWidth : .88,
-                 																items: [
-                 																         {
-                 																        	 
-                 															             	   labelWidth:65, 
-                 															             	   xtype: 'textareafield', 
-                 															                   fieldLabel:'公&nbsp;&nbsp;&nbsp;司&nbsp;&nbsp;&nbsp;规&nbsp;&nbsp;&nbsp;模', 
-                 															                   name: 'supplierName' 
-                 															               },
-                 															              {
-                   																        	 
-                  															             	   labelWidth:65, 
-                  															             	   xtype: 'textareafield', 
-                  															                   fieldLabel:'销&nbsp;&nbsp;&nbsp;售&nbsp;&nbsp;&nbsp;能&nbsp;&nbsp;&nbsp;力', 
-                  															                   name: 'supplierName' 
-                  															               },
-                  															              {
-                     																        	 
-                   															             	   labelWidth:65, 
-                   															             	   xtype: 'textareafield', 
-                   															                   fieldLabel:'质&nbsp;&nbsp;&nbsp;量&nbsp;&nbsp;&nbsp;控&nbsp;&nbsp;&nbsp;制', 
-                   															                   name: 'supplierName' 
-                   															               },
-                  															              {
-                     																        	 
-                   															             	   labelWidth:65, 
-                   															             	   xtype: 'textareafield', 
-                   															                   fieldLabel:'公&nbsp;&nbsp;&nbsp;司&nbsp;&nbsp;&nbsp;简&nbsp;&nbsp;&nbsp;介', 
-                   															                   name: 'supplierName' 
-                   															               },
-                  															              {
-                     																        	 
-                   															             	   labelWidth:65, 
-                   															             	   xtype: 'textareafield', 
-                   															                   fieldLabel:'生产/销售产品类别', 
-                   															                   name: 'supplierName' 
-                   															               },
-                  															              {
-                     																        	 
-                   															             	   labelWidth:65, 
-                   															             	   xtype: 'textareafield', 
-                   															                   fieldLabel:'合&nbsp;&nbsp;&nbsp;作&nbsp;&nbsp;&nbsp;机&nbsp;&nbsp;&nbsp;会', 
-                   															                   name: 'supplierName' 
-                   															               },
-                  															              {
-                   															            	   rows:6, 
-                   															             	   labelWidth:65, 
-                   															             	   xtype: 'textareafield', 
-                   															                   fieldLabel:'备&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注', 
-                   															                   name: 'supplierName' 
-                   															               }
-                 															           ]
-                 															 }
-                 															]
-                 															        	                                        	 
-                         	                                          }
-              	                                        	 
-         	                                          
-        	                                       ]
-        	                                      }),
-        	                                      buttons:[
-        	                                      {
-        	                                          text:'保存',
-        	                                          disabled:false//暂时设为不可用
-        	                                      },
-        	                                      {
-        	                                          text:'取消',
-        	                                          handler:function(){//点击时触发的事件
-        	                                              win.hide();
-        	                                          }
-        	                                      }
-        	                                      ]
-        	                                  });
+        				 layout : "column", //第七行
+        				 defaults:{
+        						 border:false ,
+        						 bodyPadding: 0,
+        						 labelWidth: 70,
+        						 labelAlign: 'right',
+        						 bodyStyle: 'background:#cbdbe0; padding:0px;'
+        				 },
+
+        				 bodyStyle: 'background:#cbdbe0; padding:0px;',
+
+        				 items:[
+        				 {
+
+        				     layout : "form", 
+        				     
+        					items: [
+        						  {
+        							   labelWidth:65, 
+        							   xtype: 'textfield', 
+        							   fieldLabel:'创建用户', 
+        							   name: 'supplierName' 
+        					       },
+        					       {
+        							   labelWidth:65, 
+        							   xtype: 'textfield', 
+        							   fieldLabel:'所在部门', 
+        							   name: 'supplierName' 
+        						   }
+        					   ]
+        				  },
+        				  {
+        					    columnWidth : .4,             
+        					    layout : "form",   
+        						items: [
+        						       {
+        							   labelWidth:65,
+        							   width:550,
+        							   xtype: 'textfield', 
+        							   fieldLabel:'修改用户', 
+        							   name: 'supplierName'
+        						       },
+        						       {
+        								   labelWidth:65, 
+        								   xtype: 'textfield', 
+        								   fieldLabel:'修改时间', 
+        								   name: 'supplierName' 
+        							   }
+        						   ]
+        				  }
+        				 ,
+        				  {
+        					    columnWidth : .5,             
+        					    layout : "form",   
+        						items: [
+        						       {
+        							   labelWidth:65,
+        							   width:550,
+        							   xtype: 'textfield', 
+        							   fieldLabel:'登录日期', 
+        							   name: 'supplierName'
+        						       }
+        						   ]
+        				  }
+        												 
+        				 ]								 
+        				 },
+        				 
+        				 
+        			 {
+        					
+        					 layout : "column", //第八行
+        					 defaults:{
+        						 border:false ,
+        						 bodyPadding: 0,
+        						 labelWidth: 70,
+	        					 labelAlign: 'right',
+	        					 height:4,
+	        					 bodyStyle: 'background:#cbdbe0; padding:0px;'
+        					 },
+        					
+        					 bodyStyle: 'background:#cbdbe0; padding:0px;',
+        					 items:[
+        												{
+
+        												    layout : "form", 
+        												    columnWidth : .88,
+        													items: [
+        														 {
+        															 
+        														   labelWidth:65, 
+        														   xtype: 'textareafield', 
+        														   fieldLabel:'公&nbsp;&nbsp;&nbsp;司&nbsp;&nbsp;&nbsp;规&nbsp;&nbsp;&nbsp;模', 
+        														   name: 'supplierName' 
+        													       },
+        													      {
+        															 
+        														   labelWidth:65, 
+        														   xtype: 'textareafield', 
+        														   fieldLabel:'销&nbsp;&nbsp;&nbsp;售&nbsp;&nbsp;&nbsp;能&nbsp;&nbsp;&nbsp;力', 
+        														   name: 'supplierName' 
+        													       },
+        													      {
+        															 
+        														   labelWidth:65, 
+        														   xtype: 'textareafield', 
+        														   fieldLabel:'质&nbsp;&nbsp;&nbsp;量&nbsp;&nbsp;&nbsp;控&nbsp;&nbsp;&nbsp;制', 
+        														   name: 'supplierName' 
+        													       },
+        													      {
+        															 
+        														   labelWidth:65, 
+        														   xtype: 'textareafield', 
+        														   fieldLabel:'公&nbsp;&nbsp;&nbsp;司&nbsp;&nbsp;&nbsp;简&nbsp;&nbsp;&nbsp;介', 
+        														   name: 'supplierName' 
+        													       },
+        													      {
+        															 
+        														   labelWidth:65, 
+        														   xtype: 'textareafield', 
+        														   fieldLabel:'生产/销售产品类别', 
+        														   name: 'supplierName' 
+        													       },
+        													      {
+        															 
+        														   labelWidth:65, 
+        														   xtype: 'textareafield', 
+        														   fieldLabel:'合&nbsp;&nbsp;&nbsp;作&nbsp;&nbsp;&nbsp;机&nbsp;&nbsp;&nbsp;会', 
+        														   name: 'supplierName' 
+        													       },
+        													      {
+        														   height:6, 
+        														   labelWidth:65, 
+        														   xtype: 'textareafield', 
+        														   fieldLabel:'备&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注', 
+        														   name: 'supplierName' 
+        													       }
+        													   ]
+        												 }
+        												]
+        																				 
+        				  }
+        			 
+        		  
+        	       ]
+        	      }),
+        	      buttons:[
+        	      {
+        		  text:'保存',
+        		  disabled:false//暂时设为不可用
+        	      },
+        	      {
+        		  text:'取消',
+        		  handler:function(){//点击时触发的事件
+        		      win.hide();
+        		  }
+        	      }
+        	      ]
+        	  });
         	                             
         	                              win.show();//显示窗体
         	                     

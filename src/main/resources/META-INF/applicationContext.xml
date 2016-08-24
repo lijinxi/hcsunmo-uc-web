@@ -25,10 +25,8 @@
         <property name="properties" ref="configProperties" />
     </bean>
    
-    <context:component-scan base-package="com.hc.scm.uc.web.controller"/>
-     <context:component-scan base-package="com.hc.scm.uc.web.purchasing.controller"/>
-    <context:component-scan base-package="com.hc.scm.uc.service.impl"/>
-    <context:component-scan base-package="com.hc.scm.uc.purchasing.service.impl"/>
+    <context:component-scan base-package="com.hc.scm.uc.web.**.controller"/>
+    <context:component-scan base-package="com.hc.scm.uc.**.service.impl"/>
     <context:component-scan base-package="com.hc.scm.uc.dao.dal.impl"/>
     <context:component-scan base-package="com.hc.scm.uc.dal.purchasing.dao.impl"/>
     <context:component-scan base-package="com.hc.scm.uc.service.aop"/>
