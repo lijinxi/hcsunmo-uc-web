@@ -2491,13 +2491,42 @@ Ext.define('Hc_Common.view.BaseSimplePageController', {
             cellIndex = -1,
             rowIndex = store.getCount();
           windowFlag=me.windowFlag;  
-          if(windowFlag){
-   
+          if(windowFlag){ 
+        	/*  var myStore = new Ext.data.JsonStore({  
+        		    url: Hc.basePath+'json/provinces.json',  
+        		    root: 'personInfoList',  
+        		    autoLoad: true,  
+        		    fields: [{name: 'id',   type: 'int'},  
+        		        {name: 'name',  type: 'string'},  
+        		        {name: 'age',  type: 'int'}]  
+        		    }); */
+        	  var myStore = new Ext.data.JsonStore({
+        		    // store configs
+        		    autoDestroy: true,
+        		    storeId: 'myStore',
+        		    autoLoad: true,
+        		    proxy: {
+        		        type: 'ajax',
+        		        url: 'json/provinces.json',
+        		        reader: {
+        		            type: 'json',
+        		            root: 'personInfoList'
+        		          //  idProperty: 'name'
+        		        }
+        		    },
+
+        		    //另外，可以配Ext.data.Model的名称(如 Ext.data.Store 中的例子)
+        		    fields: [{name: 'id',   type: 'int'},  
+             		        {name: 'name',  type: 'string'},  
+             		        {name: 'age',  type: 'int'}] 
+        		});
+        	  
+        	  console.info(myStore);
         	  var win;
         	                                  win=new Ext.Window({
         	                                      title:'新增',
-        	                                      width:800,
-        	                                      height:500,
+        	                                      width: window.screen.availWidth/2,
+        	                                      height:(window.screen.availHeight/3)*2,
         	                                      layout:'fit',//设置窗口内部布局
         	                                      closeAction:'hide',
         	                                      plain:false,//true则主体背景透明，false则和主体背景有些差别
@@ -2548,7 +2577,7 @@ Ext.define('Hc_Common.view.BaseSimplePageController', {
 															             	   labelWidth:65, 
 															             	   xtype: 'textfield', 
 															                   fieldLabel:'供应商编码', 
-															                   name: 'supplierName' 
+															                   name: 'supplierName'   
 															               }
 															           ]
 															 },
@@ -2561,7 +2590,20 @@ Ext.define('Hc_Common.view.BaseSimplePageController', {
 																             	   width:550,
 																             	   xtype: 'textfield', 
 																                   fieldLabel:'供应商名称', 
-																                   name: 'supplierName'
+																                   name: 'supplierName',
+																                   allowBlank:false,
+																                   maxLength:120,
+																                   maxLengthText:'此框允许输入120个字符',
+ 																                   listeners: {
+ 																                       render: function(obj) {
+ 																                             var font=document.createElement("font");
+ 																                             font.setAttribute("color","red");
+ 																                             var tips=document.createTextNode('*');//这个就是后面的文字提示信息
+ 																                             font.appendChild(tips);
+ 																                            obj.el.dom.appendChild(font);
+ 																                     }
+
+ 																                   }
 																               }
 																           ]
 																 }
@@ -2591,7 +2633,21 @@ Ext.define('Hc_Common.view.BaseSimplePageController', {
  															             	   labelWidth:65, 
  															             	   xtype: 'textfield', 
  															                   fieldLabel:'供应商地址', 
- 															                   name: 'supplierName' 
+ 															                   name: 'supplierName',
+ 															                   allowBlank:false,
+															                   maxLength:145,
+															                   maxLengthText:'此框允许输入145个字符',
+															                   listeners: {
+															                       render: function(obj) {
+															                             var font=document.createElement("font");
+															                             font.setAttribute("color","red");
+															                             var tips=document.createTextNode('*');//这个就是后面的文字提示信息
+															                             font.appendChild(tips);
+															                            obj.el.dom.appendChild(font);
+															                     }
+
+															                  }
+ 																               
  															               }
  															           ]
  															 }
@@ -2621,7 +2677,20 @@ Ext.define('Hc_Common.view.BaseSimplePageController', {
 	         	                                        	 		   labelWidth:65, 
 	         	                                        	 		   xtype: 'textfield', 
 	         	                                        	 		   fieldLabel:'公司电话', 
-	         	                                        	 		   name: 'supplierName' 
+	         	                                        	 		   name: 'supplierName',
+	         	                                        	 		   allowBlank:false,
+	         	                                        	 		   regex:/^(0[0-9]{2,3}\-)?([2-9][0-9]{6,7})+(\-[0-9]{1,4})?$|(^(13[0-9]|15[0|3|6|7|8|9]|18[8|9])\d{8}$)/,
+	         	                                        	 		   regexText:'正确的电话号码，\n\n如：0591-6487256，15005059587',
+	         	                                        	 		   listeners: {
+														                       render: function(obj) {
+														                             var font=document.createElement("font");
+														                             font.setAttribute("color","red");
+														                             var tips=document.createTextNode('*');//这个就是后面的文字提示信息
+														                             font.appendChild(tips);
+														                            obj.el.dom.appendChild(font);
+														                     }
+
+														              }
          	                                        	 	       },
 	     	                                        	 	       {
 	          	                                        	 		   labelWidth:65, 
@@ -2640,13 +2709,27 @@ Ext.define('Hc_Common.view.BaseSimplePageController', {
          	                                        	 			   width:550,
          	                                        	 			   xtype: 'textfield', 
          	                                        	 			   fieldLabel:'公司传真', 
-         	                                        	 			   name: 'supplierName'
+         	                                        	 			   name: 'supplierName',
+         	                                        	 			   allowBlank:false,
+         	                                        	 			   regex:/^[+]{0,1}(\d){1,3}[ ]?([-]?((\d)|[ ]){1,12})+$/,
          	                                        	 		       },
     	     	                                        	 	       {
     	          	                                        	 		   labelWidth:65, 
     	          	                                        	 		   xtype: 'textfield', 
     	          	                                        	 		   fieldLabel:'邮 &nbsp;&nbsp;&nbsp;&nbsp; 编', 
-    	          	                                        	 		   name: 'supplierName' 
+    	          	                                        	 		   name: 'supplierName',
+    	          	                                        	 		   allowBlank:false,
+         	                                        	 			       regex:/[1-9]{1}(\d+){5}/,
+														                   listeners: {
+															                       render: function(obj) {
+															                             var font=document.createElement("font");
+															                             font.setAttribute("color","red");
+															                             var tips=document.createTextNode('*');//这个就是后面的文字提示信息   
+															                             font.appendChild(tips);
+															                            obj.el.dom.appendChild(font);
+															                     }
+
+															              } 
     	          	                                        	 	   }
          	                                        	 		   ]
          	                                        	  }
@@ -2660,21 +2743,44 @@ Ext.define('Hc_Common.view.BaseSimplePageController', {
         	                                        	 			   width:550,
         	                                        	 			   xtype: 'textfield', 
         	                                        	 			   fieldLabel:'电子邮件', 
-        	                                        	 			   name: 'supplierName'
+        	                                        	 			   name: 'supplierName',
+        	                                        	 			   allowBlank:false,
+        	                                        	 			   regex:/\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/,
+													                   listeners: {
+														                       render: function(obj) {
+														                             var font=document.createElement("font");
+														                             font.setAttribute("color","red");
+														                             var tips=document.createTextNode('*');//这个就是后面的文字提示信息
+														                             font.appendChild(tips);
+														                            obj.el.dom.appendChild(font);
+														                     }
+
+														              }
         	                                        	 		       },
     	     	                                        	 	       {
     	          	                                        	 		   labelWidth:65, 
     	          	                                        	 		   xtype: 'textfield', 
     	          	                                        	 		   fieldLabel:'国&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;家', 
-    	          	                                        	 		   name: 'supplierName' 
+    	          	                                        	 		   name: 'supplierName',
+    	          	                                        	 		   allowBlank:false,
+    	          	                                        	 		   maxLength:48,
+    	          	                                        	 		   maxLengthText:'最大字符长度48字符',
+														                   listeners: {
+															                       render: function(obj) {
+															                             var font=document.createElement("font");
+															                             font.setAttribute("color","red");
+															                             var tips=document.createTextNode('*');//这个就是后面的文字提示信息
+															                             font.appendChild(tips);
+															                            obj.el.dom.appendChild(font);
+															                     }
+
+															              }
     	          	                                        	 	   }
         	                                        	 		   ]
         	                                        	  }
          	                                        	 								 
          	                                        	 ]								 
          	                                        	 },
-         	                                        	 
-         	                                        	 
          	                                        	 {
                	                                        	
              	                                        	 layout : "column", //第四行
@@ -2696,9 +2802,26 @@ Ext.define('Hc_Common.view.BaseSimplePageController', {
      																         {
      																        	 
      															             	   labelWidth:65, 
-     															             	   xtype: 'textfield', 
+     															             	   xtype: 'extcombox', 
+     															             	   store:myStore,
      															                   fieldLabel:'省&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;份', 
-     															                   name: 'supplierName' 
+     															                   name: 'supplierName',
+     															                   displaymember:'name',
+     															 				   valuemember:'age',
+     															                   allowBlank:false,
+     															                   blankText:'请选择省份',
+     															                   emptyText:'请选择省份',
+ 																                   listeners: {
+ 																                       render: function(obj) {
+ 																                             var font=document.createElement("font");
+ 																                             font.setAttribute("color","red");
+ 																                             var tips=document.createTextNode('*');//这个就是后面的文字提示信息
+ 																                             font.appendChild(tips);
+ 																                            obj.el.dom.appendChild(font);
+ 																                              
+ 																                     }
+
+ 																                   }
      															               }
      															           ]
      															 },
@@ -2712,7 +2835,20 @@ Ext.define('Hc_Common.view.BaseSimplePageController', {
       															             	   labelWidth:65, 
       															             	   xtype: 'textfield', 
       															                   fieldLabel:'城&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;市', 
-      															                   name: 'supplierName' 
+      															                   name: 'supplierName' ,
+      															                   allowBlank:false,
+	   															                   blankText:'请选择城市',
+	   															                   emptyText:'请选择城市',
+ 																                   listeners: {
+ 																                       render: function(obj) {
+ 																                             var font=document.createElement("font");
+ 																                             font.setAttribute("color","red");
+ 																                             var tips=document.createTextNode('*');//这个就是后面的文字提示信息
+ 																                             font.appendChild(tips);
+ 																                            obj.el.dom.appendChild(font);
+ 																                     }
+
+ 																                  }
       															               }
       															           ]
       															 }
@@ -2744,25 +2880,65 @@ Ext.define('Hc_Common.view.BaseSimplePageController', {
      	         	                                        	 		   labelWidth:65, 
      	         	                                        	 		   xtype: 'textfield', 
      	         	                                        	 		   fieldLabel:'法人代表', 
-     	         	                                        	 		   name: 'supplierName' 
+     	         	                                        	 		   name: 'supplierName',
+														                   listeners: {
+															                       render: function(obj) {
+															                             var font=document.createElement("font");
+															                             font.setAttribute("color","red");
+															                             var tips=document.createTextNode('*');//这个就是后面的文字提示信息
+															                             font.appendChild(tips);
+															                            obj.el.dom.appendChild(font);
+															                     }
+
+															              } 
               	                                        	 	       },
      	     	                                        	 	       {
      	          	                                        	 		   labelWidth:65, 
      	          	                                        	 		   xtype: 'textfield', 
      	          	                                        	 		   fieldLabel:'注册资本', 
-     	          	                                        	 		   name: 'supplierName' 
+     	          	                                        	 		   name: 'supplierName',
+														                   listeners: {
+															                       render: function(obj) {
+															                             var font=document.createElement("font");
+															                             font.setAttribute("color","red");
+															                             var tips=document.createTextNode('万元');//这个就是后面的文字提示信息
+															                             font.appendChild(tips);
+															                            obj.el.dom.appendChild(font);
+															                     }
+
+															              }
      	          	                                        	 	   },
      	     	                                        	 	       {
      	          	                                        	 		   labelWidth:65, 
      	          	                                        	 		   xtype: 'textfield', 
      	          	                                        	 		   fieldLabel:'使用货币', 
-     	          	                                        	 		   name: 'supplierName' 
+     	          	                                        	 		   name: 'supplierName',
+														                   listeners: {
+															                       render: function(obj) {
+															                             var font=document.createElement("font");
+															                             font.setAttribute("color","red");
+															                             var tips=document.createTextNode('*');//这个就是后面的文字提示信息
+															                             font.appendChild(tips);
+															                            obj.el.dom.appendChild(font);
+															                     }
+
+															              } 
      	          	                                        	 	   },
      	     	                                        	 	       {
      	          	                                        	 		   labelWidth:65, 
      	          	                                        	 		   xtype: 'textfield', 
      	          	                                        	 		   fieldLabel:'年度收入', 
-     	          	                                        	 		   name: 'supplierName' 
+     	          	                                        	 		   name: 'supplierName',
+														                   listeners: {
+															                       render: function(obj) {
+															                             var font=document.createElement("font");
+															                             font.setAttribute("color","red");
+															                             var tips=document.createTextNode('万元');//这个就是后面的文字提示信息
+															                             font.appendChild(tips);
+															                            obj.el.dom.appendChild(font);
+															                     }
+
+															              } 
      	          	                                        	 	   }
               	                                        	 	   ]
               	                                        	  },
@@ -2775,7 +2951,17 @@ Ext.define('Hc_Common.view.BaseSimplePageController', {
               	                                        	 			   width:550,
               	                                        	 			   xtype: 'textfield', 
               	                                        	 			   fieldLabel:'组织形式', 
-              	                                        	 			   name: 'supplierName'
+              	                                        	 			   name: 'supplierName',
+														                   listeners: {
+															                       render: function(obj) {
+															                             var font=document.createElement("font");
+															                             font.setAttribute("color","red");
+															                             var tips=document.createTextNode('*');//这个就是后面的文字提示信息
+															                             font.appendChild(tips);
+															                            obj.el.dom.appendChild(font);
+															                     }
+
+															              }
               	                                        	 		       },
          	     	                                        	 	       {
          	          	                                        	 		   labelWidth:65, 
@@ -2787,13 +2973,33 @@ Ext.define('Hc_Common.view.BaseSimplePageController', {
          	          	                                        	 		   labelWidth:65, 
          	          	                                        	 		   xtype: 'textfield', 
          	          	                                        	 		   fieldLabel:'联系人', 
-         	          	                                        	 		   name: 'supplierName' 
+         	          	                                        	 		   name: 'supplierName',
+															                   listeners: {
+															                       render: function(obj) {
+															                             var font=document.createElement("font");
+															                             font.setAttribute("color","red");
+															                             var tips=document.createTextNode('*');//这个就是后面的文字提示信息
+															                             font.appendChild(tips);
+															                            obj.el.dom.appendChild(font);
+															                     }
+
+															              } 
          	          	                                        	 	   },
          	     	                                        	 	       {
          	          	                                        	 		   labelWidth:65, 
          	          	                                        	 		   xtype: 'textfield', 
          	          	                                        	 		   fieldLabel:'跟单采购', 
-         	          	                                        	 		   name: 'supplierName' 
+         	          	                                        	 		   name: 'supplierName',
+															                   listeners: {
+															                       render: function(obj) {
+															                             var font=document.createElement("font");
+															                             font.setAttribute("color","red");
+															                             var tips=document.createTextNode('*');//这个就是后面的文字提示信息
+															                             font.appendChild(tips);
+															                            obj.el.dom.appendChild(font);
+															                     }
+
+															              } 
          	          	                                        	 	   }
               	                                        	 		   ]
               	                                        	  }
@@ -2825,7 +3031,17 @@ Ext.define('Hc_Common.view.BaseSimplePageController', {
          	          	                                        	 		   labelWidth:65, 
          	          	                                        	 		   xtype: 'textfield', 
          	          	                                        	 		   fieldLabel:'联系人手机', 
-         	          	                                        	 		   name: 'supplierName' 
+         	          	                                        	 		   name: 'supplierName',
+															                   listeners: {
+															                       render: function(obj) {
+															                             var font=document.createElement("font");
+															                             font.setAttribute("color","red");
+															                             var tips=document.createTextNode('*');//这个就是后面的文字提示信息
+															                             font.appendChild(tips);
+															                            obj.el.dom.appendChild(font);
+															                     }
+
+															              } 
          	          	                                        	 	   }
              	                                        	 		   ]
              	                                        	  }
@@ -2857,14 +3073,34 @@ Ext.define('Hc_Common.view.BaseSimplePageController', {
         	         	                                        	 		   labelWidth:65, 
         	         	                                        	 		   xtype: 'textfield', 
         	         	                                        	 		   fieldLabel:'开户银行', 
-        	         	                                        	 		   name: 'supplierName' 
+        	         	                                        	 		   name: 'supplierName',
+															                   listeners: {
+															                       render: function(obj) {
+															                             var font=document.createElement("font");
+															                             font.setAttribute("color","red");
+															                             var tips=document.createTextNode('*');//这个就是后面的文字提示信息
+															                             font.appendChild(tips);
+															                            obj.el.dom.appendChild(font);
+															                     }
+
+															                  } 
                  	                                        	 	       },
         	     	                                        	 	       {
         	          	                                        	 		   labelWidth:65, 
         	          	                                        	 		   xtype: 'textfield', 
         	          	                                        	 		   fieldLabel:'付款方式', 
-        	          	                                        	 		   name: 'supplierName' 
-        	          	                                        	 	   }
+        	          	                                        	 		   name: 'supplierName',
+															                   listeners: {
+															                       render: function(obj) {
+															                             var font=document.createElement("font");
+															                             font.setAttribute("color","red");
+															                             var tips=document.createTextNode('*');//这个就是后面的文字提示信息
+															                             font.appendChild(tips);
+															                            obj.el.dom.appendChild(font);
+															                     }
+
+															                  }
+        	     	                                        	 	       }
                  	                                        	 	   ]
                  	                                        	  },
                  	                                        	  {

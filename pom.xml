@@ -15,6 +15,7 @@
   <url>http://maven.apache.org</url>
   
   <dependencies>
+
    <!-- 本工程 -->
 		<dependency>
 			<groupId>com.hc.scm</groupId>
