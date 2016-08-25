@@ -2492,16 +2492,7 @@ Ext.define('Hc_Common.view.BaseSimplePageController', {
             rowIndex = store.getCount();
           windowFlag=me.windowFlag;  
           if(windowFlag){ 
-        	/*  var myStore = new Ext.data.JsonStore({  
-        		    url: Hc.basePath+'json/provinces.json',  
-        		    root: 'personInfoList',  
-        		    autoLoad: true,  
-        		    fields: [{name: 'id',   type: 'int'},  
-        		        {name: 'name',  type: 'string'},  
-        		        {name: 'age',  type: 'int'}]  
-        		    }); */
         	  var myStore = new Ext.data.JsonStore({
-        		    // store configs
         		    autoDestroy: true,
         		    storeId: 'myStore',
         		    autoLoad: true,
@@ -2514,18 +2505,33 @@ Ext.define('Hc_Common.view.BaseSimplePageController', {
         		            idProperty: 'provinceNo'
         		        }
         		    },
-
-        		    //另外，可以配Ext.data.Model的名称(如 Ext.data.Store 中的例子)
         		    fields: [{name: 'id',   type: 'int'},  
              		        {name: 'provinceNo',  type: 'string'},  
              		        {name: 'provinceName',  type: 'string'}] 
         		});
         	  
+        	  var myStoreCity = new Ext.data.JsonStore({
+      		    autoDestroy: true,
+      		    autoLoad: false,
+      		    proxy: {
+    		        type: 'ajax',
+    		        url: Hc.basePath +'hc_file_json_city_list/city.json',
+    		        reader: {
+    		            type: 'json',
+    		            rootProperty: 'list',
+    		            idProperty: 'provinceNo'
+    		        }
+    		    },
+      		    fields: [
+           		        {name: 'cityID',  type: 'string'},  
+           		        {name: 'cityName',  type: 'string'}] 
+      		});
+        	  
         	  console.info(myStore);
         	  var win;
         	  win=new Ext.Window({
         	      title:'新增',
-        	      width: window.screen.availWidth/2,
+        	      width: (window.screen.availWidth/7)*4.45,
         	      height:(window.screen.availHeight/3)*2,
         	      layout:'fit',//设置窗口内部布局
         	      closeAction:'hide',
@@ -2826,7 +2832,21 @@ Ext.define('Hc_Common.view.BaseSimplePageController', {
         														     font.appendChild(tips);
         														     obj.el.dom.appendChild(font);
         														      
-        													     }
+        													       },
+        													       select:function(obj,records){ 
+        													    	 console.info(records.data.provinceNo);
+        													    	  Ext.apply(myStoreCity.proxy, {
+        													    		  extraParams: {                         
+        													    			  provinceNo : records.data.provinceNo
+				              								              },
+				              								              writer:{type:"json"}
+        													    	  });
+        													    	  
+        												      		  myStoreCity.reload();
+        												      		  console.info("李金喜");
+        												      		  console.info(Ext.select("cityID"));
+        												   
+        													       }
 
         													   }
         											       }
@@ -2837,19 +2857,18 @@ Ext.define('Hc_Common.view.BaseSimplePageController', {
         										    layout : "form", 
         										    columnWidth : .3,
         											items: [
-        												 {
-        													 
+        												 {	 
         												   labelWidth:65, 
-        												  
         												   fieldLabel:'城&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;市', 
         												   xtype:'extcombox',
-	       									               store: myStore,
-	       												   displaymember:'provinceName',
-	       												   valuemember:'provinceNo',
-        												 //  name: 'supplierName' ,
+	       									               store: myStoreCity,
+	       									               id:'cityID',
+	       												   displaymember:'cityName',
+	       												   valuemember:'cityID',
         												   allowBlank:false,
         													   blankText:'请选择城市',
         													   emptyText:'请选择城市',
+        													 
         													   listeners: {
         													       render: function(obj) {
         														     var font=document.createElement("font");
@@ -2861,8 +2880,7 @@ Ext.define('Hc_Common.view.BaseSimplePageController', {
         														     console.info("什么对象");
         														     console.info(obj);
         													     }
-
-        													  }
+        												     }
         											       }
         											   ]
         										 }

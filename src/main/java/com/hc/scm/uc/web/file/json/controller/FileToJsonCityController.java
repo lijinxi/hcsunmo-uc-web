@@ -15,28 +15,31 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hc.scm.common.base.service.BaseCrudService;
 import com.hc.scm.common.base.web.BaseCrudController;
-import com.hc.scm.uc.dao.file.json.model.Province;
-import com.hc.scm.uc.file.json.service.FileToJsonProvinceService;
+import com.hc.scm.uc.dao.file.json.model.City;
+import com.hc.scm.uc.file.json.service.FileToJsonCityService;
 
 
 @Controller
-@RequestMapping("/hc_file_json_province_list")
-public class FileToJsonProvinceController extends BaseCrudController<Province> {
-	
+@RequestMapping("/hc_file_json_city_list")
+public class FileToJsonCityController extends BaseCrudController<City> {
+
 	@Resource
-    private   FileToJsonProvinceService  fileToJsonProvinceService;
+    private  FileToJsonCityService  fileToJsonCityService;
 	@Override
 	protected BaseCrudService init() {
 		// TODO Auto-generated method stub
-		return fileToJsonProvinceService;
+		return fileToJsonCityService;
 	}
-	
-    @RequestMapping("/province.json")
+    @RequestMapping("/city.json")
     @ResponseBody
     public Map<String,Object> add(HttpServletRequest req, Model model) throws Exception {
     	 Map<String, Object> resultMap =new HashMap<String, Object>();
-    	 List<Province> list=new  ArrayList<Province>();
-    	 list= fileToJsonProvinceService.getProvinceList();
+    	 List<City> list=new  ArrayList<City>();
+    	 System.out.println("你好吗");
+    	 System.out.println(req.getParameter("provinceNo"));
+    	 String  provinceNo=req.getParameter("provinceNo").toString();
+    	 list= fileToJsonCityService.getCityList(provinceNo);
+    	 System.out.println("你好吗"+list.size());
     	 resultMap.put("list",list);
     	return resultMap;
    }
